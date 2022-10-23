@@ -41,7 +41,7 @@ This component is used to display a word. It will be displayed in a different co
 
 This component is used to display the speed of the user. It will be displayed in a different color depending on the speed of the user. The speed is calculated as the number of words typed per minute.
 
-### `<InputField word={} correct={} incorrect={} ok={} warning={} state={} />`
+### `<InputField word={} correct={} incorrect={} ok={} warning={} state={} start={start} />`
 
 This component is used to display the input field. It will inform the parent component whether the user has typed a word correctly, incorrectly or is still typing it.
 
@@ -97,6 +97,5 @@ Defines a simple button component. Its properties are `onClick` and `children`.
 
 Module that exports some usefull icons. All of them have a property `size` that can be used to set the size of the icon. The following icons are exported:
 
-- `Play`
 - `Pause`
 - `Restart`

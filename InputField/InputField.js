@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
  * component whether the user has typed a word correctly, incorrectly or is
  * still typing it.
  */
-export default function InputField({ word, correct, incorrect, ok, warning, state }) {
+export default function InputField({ word, correct, incorrect, ok, warning, state, start }) {
 
     // The value of the input field
     const [value, setValue] = useState('');
@@ -34,7 +34,7 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
 
     function onChange(e) {
 
-        if (state != 'running') return;
+        if (state != 'running') start();
 
         // Update the value
         setValue(e.target.value);
@@ -49,6 +49,7 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
             ref={input}
             className='typex-input'
             value={value}
+            onKeyDown={onKeyDown}
             onChange={onChange}
         />
     )

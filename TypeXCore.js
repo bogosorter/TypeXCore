@@ -2,7 +2,7 @@ import Word from './Word/Word';
 import InputField from './InputField/InputField';
 import SpeedIndicator from './SpeedIndicator/SpeedIndicator';
 import Button from './Button/Button';
-import { Play, Pause, Restart } from './Icons/Icons';
+import { Pause, Restart } from './Icons/Icons';
 
 import { useState, useMemo } from 'react';
 import Timer from './Timer/Timer';
@@ -62,7 +62,7 @@ export default function TypeXCore() {
     // Word was typed correctly
     function correct() {
         // Spaces should be counted
-        setCount(count + 1 + words[wIndex].length);
+        setCount(count + 1 + words[wIndex].word.length);
         const newWords = [...words];
         newWords[wIndex].state = 'correct';
         setWords(newWords);
@@ -124,16 +124,15 @@ export default function TypeXCore() {
                 word={words[wIndex].word}
                 correct={correct}
                 incorrect={incorrect}
+                ok={ok}
                 warning={warning}
                 state={state}
+                start={start}
             />
-            <SpeedIndicator count={count} timer={timer} />
+            {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
             <div id='typex-buttons'>
-                <Button onClick={state == 'running'? pause : start}>
-                    {state == 'running'? <Pause /> : <Play />}
-                </Button>
-                <Button onClick={reset}>
-                    <Restart />
+                <Button onClick={state == 'running'? pause : reset}>
+                    {state == 'running'? <Pause /> : <Restart />}
                 </Button>
             </div>
         </div>

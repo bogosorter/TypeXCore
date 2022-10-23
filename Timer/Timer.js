@@ -36,13 +36,13 @@ export default class Timer {
     }
 
     /**
-     * Returns the time elapsed since the timer was started.
+     * Returns the time elapsed since the timer was started
      */
     get() {
         if (this.state == 'running') {
-            return this.time + Date.now() - this.startTime;
+            return (this.time + Date.now() - this.startTime) / 1000;
         } else {
-            return this.time;
+            return this.time / 1000;
         }
     }
 

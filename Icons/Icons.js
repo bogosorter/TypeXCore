@@ -1,11 +1,3 @@
-function Play({size = 20}) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 4L15 10L5 16V4Z" fill="currentColor"/>
-        </svg>
-    )
-}
-
 function Pause({size = 20}) {
     return (
         <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,4 +16,4 @@ function Restart({size = 20}) {
     )
 }
 
-export { Play, Pause, Restart };
+export { Pause, Restart };
