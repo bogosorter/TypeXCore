@@ -3,35 +3,47 @@
  */
 export default class Timer {
     constructor() {
-
+        this.state = 'stopped';
+        this.time = 0;
+        this.startTime = 0;
     }
 
     /**
      * Starts the timer. If the timer has already stared, nothing happens.
      */
     start() {
-            
+        if (this.state == 'running') return;
+        this.state = 'running';
+        this.startTime = Date.now();
     }
 
     /**
      * Pauses the timer.
      */
     pause() {
-
+        if (this.state == 'paused') return;
+        this.state = 'paused';
+        this.time += Date.now() - this.startTime;
     }
 
     /**
      * Resets the timer.
      */
     reset() {
-
+        this.state = 'stopped';
+        this.time = 0;
+        this.startTime = 0;
     }
 
     /**
      * Returns the time elapsed since the timer was started.
      */
     get() {
-
+        if (this.state == 'running') {
+            return this.time + Date.now() - this.startTime;
+        } else {
+            return this.time;
+        }
     }
 
     /**
@@ -42,6 +54,6 @@ export default class Timer {
      * - `stopped`: the timer is stopped
      */
     state() {
-        
+        return this.state;
     }
 }
