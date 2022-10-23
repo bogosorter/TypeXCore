@@ -1,0 +1,19 @@
+#typex-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#typex-words {
+    display: flex;
+}
+
+.spacer-20 {
+    height: 40px;
+}
+
+#typex-io-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}

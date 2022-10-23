@@ -1,3 +1,5 @@
+import './button.css';
+
 /**
  * Defines a simple button component. Its properties are `onClick` and `children`.
  */

@@ -1,3 +1,5 @@
+import './speedindicator.css';
+
 /**
  * Component used to display the speed of the user. It will be displayed
  * in a different color depending on the speed of the user. The speed is
@@ -12,10 +14,11 @@ export default function SpeedIndicator({ count, timer }) {
 
     // The color of the speed indicator
     // Blend between blue and green
-    const color = `hsl(${Math.min(120, speed / 100 * 120)}, 100%, 50%)`;
+    const percent = speed / 200;
+    const color = `rgba(0, ${(1 - percent) * 255}, ${percent * 255}, 0.3)`
 
     return (
-        <div className='typex-speed' style={{ '--color': color }}>
+        <div id='typex-speed' style={{ '--bg-color': color }}>
             {Math.round(speed)} wpm
         </div>
     );

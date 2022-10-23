@@ -1,0 +1,11 @@
+#typex-speed {
+    color: var(--color);
+    background-color: var(--bg-color);
+    border-radius: 5px;
+    width: 100px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}

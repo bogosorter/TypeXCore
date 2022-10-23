@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './inputfield.css';
 
 /**
  * Component used to display the input field. It will inform the parent
@@ -40,17 +41,18 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
         setValue(e.target.value);
 
         // Check if the word is being typed correctly
-        if (word.startsWith(value)) ok();
+        if (word.startsWith(e.target.value)) ok();
         else warning();
     }
 
     return (
         <input
+            id='typex-input'
             ref={input}
-            className='typex-input'
             value={value}
             onKeyDown={onKeyDown}
             onChange={onChange}
+            placeholder='Type here...'
         />
     )
 }

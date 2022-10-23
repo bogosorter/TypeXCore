@@ -7,6 +7,7 @@ import { Pause, Restart } from './Icons/Icons';
 import { useState, useMemo } from 'react';
 import Timer from './Timer/Timer';
 import Words from './Words/Words';
+import './typexcore.css';
 
 /**
  * This is the main component. It will display the text to type and the input
@@ -120,20 +121,20 @@ export default function TypeXCore() {
                     />
                 ))}
             </div>
-            <InputField
-                word={words[wIndex].word}
-                correct={correct}
-                incorrect={incorrect}
-                ok={ok}
-                warning={warning}
-                state={state}
-                start={start}
-            />
-            {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
-            <div id='typex-buttons'>
+            <div id='typex-io-container'>
+                <InputField
+                    word={words[wIndex].word}
+                    correct={correct}
+                    incorrect={incorrect}
+                    ok={ok}
+                    warning={warning}
+                    state={state}
+                    start={start}
+                />
                 <Button onClick={state == 'running'? pause : reset}>
                     {state == 'running'? <Pause /> : <Restart />}
                 </Button>
+                {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
             </div>
         </div>
     )

@@ -1,3 +1,5 @@
+import './word.css';
+
 /**
  * Component used to display a word. It will be displayed in a different
  * color depending on the state of the word. The state can be one of the
@@ -11,6 +13,6 @@
  */
 export default function Word({ word, state }) {
     return (
-        <span className={`typex-word ${state}`}>{word}</span>
+        <div className={`typex-word ${state}`}>{word}</div>
     )
 }

@@ -25,7 +25,7 @@ const words = {
 }
 ```
 
-Furthermore, the component assumes that some CSS variables are defined, such as `--bg-color`, `--color`, `--color-07`, `--color-05`, `--color-02`, `--color-01`. These are used to style the component.
+Furthermore, the component assumes that some CSS variables are defined, such as `--bg-color`, `--color`, `--color-07`, `--color-05`, `--color-02`, `--color-01` and `--transition`. These are used to style the component.
 
 ### `<Word word={} state={} />`
 
