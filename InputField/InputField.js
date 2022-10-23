@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 /**
  * Component used to display the input field. It will inform the parent
@@ -18,7 +18,7 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
         input.current.focus();
     }, [word]);
 
-    function onKeyDown() {
+    function onKeyDown(e) {
         // Space and enter trigger submission
         if (e.key == ' ' || e.key == 'Enter') {
             e.preventDefault();

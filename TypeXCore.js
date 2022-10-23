@@ -99,8 +99,8 @@ export default function TypeXCore() {
         setState('paused');
     }
     // Restart the timer
-    function stop() {
-        timer.stop();
+    function reset() {
+        timer.reset();
         setState('stopped');
         setWords(Words.getWords(10));
         setWIndex(0);
