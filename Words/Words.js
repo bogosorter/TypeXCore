@@ -14,6 +14,7 @@ export default class Words {
                 state: 'default'
             });
         }
+        return result;
     }
 
     /**

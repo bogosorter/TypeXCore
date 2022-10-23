@@ -106,7 +106,7 @@ export default function TypeXCore() {
         setWIndex(0);
         setCount(0);
     }
-
+    
     const currentWordState = words[wIndex].state == 'warning'? 'warning' : 'current';
 
     return (
@@ -115,7 +115,7 @@ export default function TypeXCore() {
                 {words.map((word, index) => (
                     <Word
                         key={index}
-                        word={word}
+                        word={word.word}
                         state={index == wIndex? currentWordState : word.state}
                     />
                 ))}
