@@ -33,6 +33,9 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
     }
 
     function onChange(e) {
+
+        if (state != 'running') return;
+
         // Update the value
         setValue(e.target.value);
 
@@ -46,8 +49,7 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
             ref={input}
             className='typex-input'
             value={value}
-            onChange={e => setValue(e.target.value)}
-            disabled={state != 'running'}
+            onChange={onChange}
         />
     )
 }
