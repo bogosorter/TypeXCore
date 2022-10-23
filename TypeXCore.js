@@ -5,30 +5,27 @@ import Button from './Button/Button';
 import { Pause, Restart } from './Icons/Icons';
 
 import { useState, useMemo } from 'react';
+import getWords from './utilities/utilities';
 import Timer from './Timer/Timer';
-import Words from './Words/Words';
 import './typexcore.css';
 
 /**
  * This is the main component. It will display the text to type and the input
- * field, as well as a speed indicator. Some assumptions are made about the
- * containing environment. For instance, settings and words are stored in
- * `localStorage`, and have the following structure:
+ * field, as well as a speed indicator. `settings` and `words` should have the
+ * following structure:
  * 
  * ```js
  * const settings = {
  *    language: {
  *       value: 'en'
  *    },
- *    displaySpeed: {
- *        value: true
- *    }
  *    ...
  * }
  *  
  * const words = {
  *    en: [word1, word2, ...],
- *    fr: [mot1, mot2, ...]
+ *    fr: [mot1, mot2, ...],
+ *    ...
  * }
  * ```
  * 
@@ -36,10 +33,10 @@ import './typexcore.css';
  * as `--bg-color`, `--color`, `--color-07`, `--color-05`, `--color-02`,
  * `--color-01`. These are used to style the component.
  */
-export default function TypeXCore() {
+export default function TypeXCore({ settings, words: w }) {
 
     // The words the user has to type
-    const [words, setWords]  = useState(Words.getWords(10));
+    const [words, setWords]  = useState(getWords(settings, w, 10));
     // The index of the current word
     const [wIndex, setWIndex] = useState(0);
 
@@ -55,7 +52,7 @@ export default function TypeXCore() {
     function next() {
         if (wIndex + 1 == words.length) {
             setWIndex(0);
-            setWords(Words.getWords(10));
+            setWords(getWords(10));
         } else {
             setWIndex(wIndex + 1);
         }
@@ -103,7 +100,7 @@ export default function TypeXCore() {
     function reset() {
         timer.reset();
         setState('stopped');
-        setWords(Words.getWords(10));
+        setWords(getWords(settings, w, 10));
         setWIndex(0);
         setCount(0);
     }

@@ -1,7 +1,7 @@
 import './button.css';
 
 /**
- * Defines a simple button component. Its properties are `onClick` and `children`.
+ * A simple button component.
  */
 export default function Button({ onClick, children }) {
     return (
