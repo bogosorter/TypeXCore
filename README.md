@@ -4,26 +4,22 @@ TypeXCore is a simple react component to improve typing speed. It will be integr
 
 ## Components
 
-### `<TypeXCore settings={} words={} />`
+### `<TypeXCore settings={} settingsButton{} />`
 
-This is the main component. It will display the text to type and the input field, as well as a speed indicator. `settings` and `words` should have the following structure:
+This is the main component. It will display the text to type and the input field, as well as a speed indicator. `settings` have the following structure:
 
 ```js
 const settings = {
     language: {
-        value: 'en'
+        value: 'english'
     }
-    ...
-}
-
-const words = {
-    en: [word1, word2, ...],
-    fr: [mot1, mot2, ...],
     ...
 }
 ```
 
 Furthermore, the component assumes that some CSS variables are defined, such as `--bg-color`, `--color`, `--color-07`, `--color-05`, `--color-02`, `--color-01` and `--transition`. These are used to style the component.
+
+`settingsButton` is an optional property (only used in the website). It should be a function that returns a button to open the settings menu.
 
 ### `<Word word={} state={} />`
 
@@ -83,7 +79,7 @@ Returns the state of the timer. It can be one of the following:
 
 Exports a function that helps to generate a list of random words.
 
-#### `getWords(settings, words, n)`
+#### `getWords(settings, n)`
 
 Returns an array of `n` random words, according to the current settings.
 

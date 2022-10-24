@@ -53,6 +53,7 @@ export default function InputField({ word, correct, incorrect, ok, warning, stat
             onKeyDown={onKeyDown}
             onChange={onChange}
             placeholder='Type here...'
+            autoComplete='off'
         />
     )
 }

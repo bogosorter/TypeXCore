@@ -8,7 +8,10 @@
     border: none;
     background-color: transparent;
     transition: var(--transition);
+    margin: 0 10px;
+    color: var(--color-05);
 }
 .typex-button:hover {
     background-color: var(--color-02);
+    color: var(--color);
 }

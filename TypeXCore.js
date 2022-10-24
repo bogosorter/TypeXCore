@@ -11,20 +11,14 @@ import './typexcore.css';
 
 /**
  * This is the main component. It will display the text to type and the input
- * field, as well as a speed indicator. `settings` and `words` should have the
+ * field, as well as a speed indicator. `settings` have the
  * following structure:
  * 
  * ```js
  * const settings = {
  *    language: {
- *       value: 'en'
+ *       value: 'english',
  *    },
- *    ...
- * }
- *  
- * const words = {
- *    en: [word1, word2, ...],
- *    fr: [mot1, mot2, ...],
  *    ...
  * }
  * ```
@@ -32,11 +26,16 @@ import './typexcore.css';
  * Furthermore, the component assumes that some CSS variables are defined, such
  * as `--bg-color`, `--color`, `--color-07`, `--color-05`, `--color-02`,
  * `--color-01`. These are used to style the component.
+ * 
+ * `settingsButton` is an optional property (only used in the website). It
+ * should be a function that returns a button to open the settings menu.
  */
-export default function TypeXCore({ settings, words: w }) {
+export default function TypeXCore({ settings, settingsButton }) {
 
     // The words the user has to type
-    const [words, setWords]  = useState(getWords(settings, w, 10));
+    const [words, setWords]  = useState(getWords(settings, 10));
+    // The words that will come next
+    const [nextWords, setNextWords] = useState(getWords(settings, 10));
     // The index of the current word
     const [wIndex, setWIndex] = useState(0);
 
@@ -52,7 +51,8 @@ export default function TypeXCore({ settings, words: w }) {
     function next() {
         if (wIndex + 1 == words.length) {
             setWIndex(0);
-            setWords(getWords(10));
+            setWords(nextWords);
+            setNextWords(getWords(settings, 10));
         } else {
             setWIndex(wIndex + 1);
         }
@@ -100,21 +100,34 @@ export default function TypeXCore({ settings, words: w }) {
     function reset() {
         timer.reset();
         setState('stopped');
-        setWords(getWords(settings, w, 10));
+        setWords(nextWords);
+        setNextWords(getWords(settings, 10));
         setWIndex(0);
         setCount(0);
     }
+
+    // Setting changes should reset the whole component
+    useMemo(reset, [settings]);
     
     const currentWordState = words[wIndex].state == 'warning'? 'warning' : 'current';
 
     return (
         <div id='typex-core'>
-            <div id='typex-words'>
+            <div className='typex-words'>
                 {words.map((word, index) => (
                     <Word
                         key={index}
                         word={word.word}
                         state={index == wIndex? currentWordState : word.state}
+                    />
+                ))}
+            </div>
+            <div className='typex-words'>
+                {nextWords.map((word, index) => (
+                    <Word
+                        key={index}
+                        word={word.word}
+                        state={word.state}
                     />
                 ))}
             </div>
@@ -128,10 +141,11 @@ export default function TypeXCore({ settings, words: w }) {
                     state={state}
                     start={start}
                 />
+                {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
                 <Button onClick={state == 'running'? pause : reset}>
                     {state == 'running'? <Pause /> : <Restart />}
                 </Button>
-                {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
+                {settingsButton && settingsButton()}
             </div>
         </div>
     )
