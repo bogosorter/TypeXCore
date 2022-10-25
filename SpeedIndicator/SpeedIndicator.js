@@ -8,6 +8,9 @@ import './speedindicator.css';
 export default function SpeedIndicator({ count, timer }) {
 
     const time = timer.get();
+
+    // `SpeedIndicator` should only be shown after 60 seconds
+    if (time < 60) return null;
     
     // A word is 5 characters long
     const speed = time == 0? 0 : count / 5 / timer.get() * 60;
