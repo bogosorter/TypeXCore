@@ -100,7 +100,7 @@ export default function TypeXCore({ settings, settingsButton }) {
     function reset() {
         timer.reset();
         setState('stopped');
-        setWords(nextWords);
+        setWords(getWords(settings, 10));
         setNextWords(getWords(settings, 10));
         setWIndex(0);
         setCount(0);
