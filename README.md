@@ -67,21 +67,13 @@ Resets the timer.
 
 Returns the time elapsed since the timer was started.
 
-#### `state()`
-
-Returns the state of the timer. It can be one of the following:
-
-- `running`: the timer is running
-- `paused`: the timer is paused
-- `stopped`: the timer has not been started yet
-
 ### Utilities
 
 Exports a function that helps to generate a list of random words.
 
-#### `getWords(settings, n)`
+#### `getText(settings, n)`
 
-Returns an array of `n` random words, according to the current settings.
+Returns an array of characters of length `n` characters, according to the current settings. These characters should make up coherent words.
 
 ### Icons
 

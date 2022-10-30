@@ -1,11 +1,11 @@
-import Word from './Word/Word';
-import InputField from './InputField/InputField';
+import Char from './Char/Char';
 import SpeedIndicator from './SpeedIndicator/SpeedIndicator';
 import Button from './Button/Button';
 import { Pause, Restart } from './Icons/Icons';
+import Caret from './Caret/Caret';
 
-import { useState, useMemo } from 'react';
-import getWords from './utilities/utilities';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import getText from './utilities/utilities';
 import Timer from './Timer/Timer';
 import './typexcore.css';
 
@@ -33,57 +33,47 @@ import './typexcore.css';
 export default function TypeXCore({ settings, settingsButton }) {
 
     // The words the user has to type
-    const [words, setWords]  = useState(getWords(settings, 10));
-    // The words that will come next
-    const [nextWords, setNextWords] = useState(getWords(settings, 10));
+    const [characters, setCharacters] = useState(getText(settings, 150));
     // The index of the current word
-    const [wIndex, setWIndex] = useState(0);
-
+    const [cIndex, setCIndex] = useState(0);
+    // Wether the input is focused
+    const [focused, setFocused] = useState(false);
     // Keep track of time
     const timer = useMemo(() => new Timer(), []);
-
     // The number of chacters the user has typed so far
     const [count, setCount] = useState(0);
-
+    // The state of the timer
     const [state, setState] = useState('stopped');
 
-    // Load next word
+    // The input field
+    const input = useRef(null);
+    // The div that contains the characters
+    const container = useRef(null);
+
+
+    // Load next character
     function next() {
-        if (wIndex + 1 == words.length) {
-            setWIndex(0);
-            setWords(nextWords);
-            setNextWords(getWords(settings, 10));
+        if (cIndex + 1 == characters.length) {
+            setCIndex(0);
+            setCharacters(getText(settings, 150));
         } else {
-            setWIndex(wIndex + 1);
+            setCIndex(cIndex + 1);
         }
     }
-    // Word was typed correctly
+    // Character was typed correctly
     function correct() {
-        // Spaces should be counted
-        setCount(count + 1 + words[wIndex].word.length);
-        const newWords = [...words];
-        newWords[wIndex].state = 'correct';
-        setWords(newWords);
+        setCount(count + 1);
+        const newCharacters = [...characters];
+        if (newCharacters[cIndex].char != ' ') newCharacters[cIndex].state = 'correct';
+        setCharacters(newCharacters);
         next();
     }
-    // Word was typed incorrectly
+    // Character was typed incorrectly
     function incorrect() {
-        const newWords = [...words];
-        newWords[wIndex].state = 'incorrect';
-        setWords(newWords);
+        const newWords = [...characters];
+        newWords[cIndex].state = 'incorrect';
+        setCharacters(newWords);
         next();
-    }
-    // Word is being typed correctly
-    function ok() {
-        const newWords = [...words];
-        newWords[wIndex].state = 'current';
-        setWords(newWords);
-    }
-    // Word is being typed incorrectly
-    function warning() {
-        const newWords = [...words];
-        newWords[wIndex].state = 'warning';
-        setWords(newWords);
     }
 
     // Start the timer
@@ -100,48 +90,130 @@ export default function TypeXCore({ settings, settingsButton }) {
     function reset() {
         timer.reset();
         setState('stopped');
-        setWords(getWords(settings, 10));
-        setNextWords(getWords(settings, 10));
-        setWIndex(0);
+        setCharacters(getText(settings, 150));
+        setCIndex(0);
         setCount(0);
     }
-
     // Setting changes should reset the whole component
     useMemo(reset, [settings]);
-    
-    const currentWordState = words[wIndex].state == 'warning'? 'warning' : 'current';
+
+    // Delete a single character
+    function deleteChar() {
+        const newCharacters = [...characters];
+        newCharacters[cIndex].state = 'default';
+        newCharacters[cIndex - 1].state = 'current';
+        setCharacters(newCharacters);
+        setCIndex(cIndex - 1);
+    }
+    // Delete a whole word
+    function deleteWord() {
+        const newCharacters = [...characters];
+        // Delete all characters until the last space
+        for (let i = cIndex; i >= 0; i--) {
+            // The last condition ensures that the last word is deleted even if
+            // the user just typed a space
+            if (i == 0 || (newCharacters[i - 1].char == ' ' && cIndex - 1 != i - 1)) {
+                newCharacters[i].state = 'current';
+                setCIndex(i);
+                break;
+            }
+            newCharacters[i].state = 'default';
+        }
+        setCharacters(newCharacters);
+    }
+    // Skip a word
+    function skipWord() {
+        const newCharacters = [...characters];
+        for (let i = cIndex; i < newCharacters.length; i++) {
+            if (newCharacters[i - 1].char == ' ') {
+                newCharacters[i].state = 'current';
+
+                setCIndex(i);
+                break;
+            }
+            newCharacters[i].state = 'incorrect';
+        }
+    }
+
+    function onKeyDown(e) {
+        if (e.key == 'Backspace' && e.ctrlKey) {
+            e.preventDefault();
+            deleteWord();
+        } else if (e.key == 'Backspace') {
+            e.preventDefault();
+            deleteChar();
+        } else if (e.key == ' ' && characters[cIndex].char != ' ') {
+            e.preventDefault();
+            skipWord();
+        }
+    }
+
+    function onChange(e) {
+        if (e.target.value == characters[cIndex].char) {
+            correct();
+        } else {
+            incorrect();
+        }
+        start();
+    }
+
+    function getCurrentCharElement() {
+        let offset = cIndex;
+        for (const child of container.current.children) {
+            if (child.children.length - 1 < offset) {
+                offset -= child.children.length;
+            } else return child.children[offset];
+        }
+    }
+
+    useEffect(() => {
+        // If current char's offset top is not zero, scroll the container
+        if (getCurrentCharElement().offsetTop != 0) {
+            let newCharacters = [...characters];
+            newCharacters.splice(0, cIndex);
+            newCharacters = newCharacters.concat(getText(settings, cIndex));
+            setCharacters(newCharacters);
+            setCIndex(0);
+        }
+        
+        if (focused) {
+            input.current.focus();
+        }
+    })
+
+    const words = [];
+    let currentWord = [];
+    for (let i = 0; i < characters.length; i++) {
+        if (characters[i].char == ' ') {
+            currentWord.push(characters[i]);
+            words.push(
+                <span key={i} className='word-container'>
+                    {currentWord.map((char, index) => (
+                        <Char
+                            key={index}
+                            word={char.char}
+                            state={char.state}
+                        />
+                    ))}
+                </span>
+            );
+            currentWord = [];
+        } else {
+            currentWord.push(characters[i]);
+        }
+    }
 
     return (
         <div id='typex-core'>
-            <div className='typex-words'>
-                {words.map((word, index) => (
-                    <Word
-                        key={index}
-                        word={word.word}
-                        state={index == wIndex? currentWordState : word.state}
-                    />
-                ))}
+            <div onClick={() => setFocused(true)}>
+                <div className={'typex-chars' + (focused? ' focused' : '')} ref={container}>
+                    {words}
+                    <Caret getCurrentChar={getCurrentCharElement} />                  
+                </div>
             </div>
-            <div className='typex-words'>
-                {nextWords.map((word, index) => (
-                    <Word
-                        key={index}
-                        word={word.word}
-                        state={word.state}
-                    />
-                ))}
-            </div>
+            <input id='typex-input' ref={input} type='text' autoComplete='off' autoCapitalize='off' value={''} onChange={onChange} onBlur={() => setFocused(false)} onKeyDown={onKeyDown}/>
             <div id='typex-io-container'>
-                <InputField
-                    word={words[wIndex].word}
-                    correct={correct}
-                    incorrect={incorrect}
-                    ok={ok}
-                    warning={warning}
-                    state={state}
-                    start={start}
-                />
-                {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [wIndex])}
+                {useMemo(() => <SpeedIndicator count={count} timer={timer} />, [cIndex])}
                 <Button onClick={state == 'running'? pause : reset}>
                     {state == 'running'? <Pause /> : <Restart />}
                 </Button>

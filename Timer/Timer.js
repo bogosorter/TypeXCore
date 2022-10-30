@@ -45,15 +45,4 @@ export default class Timer {
             return this.time / 1000;
         }
     }
-
-    /**
-     * Returns the state of the timer. It can be one of the following:
-     * 
-     * - `running`: the timer is running
-     * - `paused`: the timer is paused
-     * - `stopped`: the timer is stopped
-     */
-    state() {
-        return this.state;
-    }
 }

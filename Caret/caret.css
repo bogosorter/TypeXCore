@@ -1,0 +1,11 @@
+#typex-caret {
+    height: 25px;
+    width: 0;
+    position: absolute;
+    border-left: 2px solid var(--color-02);
+    transition: all 0.2s ease;
+}
+
+.focused #typex-caret {
+    border-left: 2px solid var(--color-07);
+}

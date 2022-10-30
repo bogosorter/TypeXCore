@@ -2,9 +2,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
-.typex-words {
+.typex-chars {
+    display: flex;
+    max-width: min(90vw, 1000px);
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+/* Prevent last line from stretching */
+.typex-chars:after {
+    content: "";
+    flex: 99999 1 auto;
+}
+.word-container {
     display: flex;
 }
 
@@ -16,4 +28,13 @@
     display: flex;
     align-items: center;
     padding: 20px;
+}
+
+#typex-input {
+    /* Hide input with CSS */
+    height: 0;
+    width: 0;
+    outline: none;
+    border: none;
+    background-color: transparent;
 }

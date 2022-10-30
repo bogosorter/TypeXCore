@@ -1,4 +1,4 @@
-import './word.css';
+import './char.css';
 
 /**
  * Component used to display a word. It will be displayed in a different
@@ -11,8 +11,8 @@ import './word.css';
  * - current: the word is currently being typed
  * - default: the word has not been typed yet
  */
-export default function Word({ word, state }) {
+export default function Char({ word, state }) {
     return (
-        <div className={`typex-word ${state}`}>{word}</div>
+        <div className={`typex-char ${state}`}>{word}</div>
     )
 }
