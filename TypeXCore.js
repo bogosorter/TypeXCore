@@ -64,14 +64,14 @@ export default function TypeXCore({ settings, settingsButton }) {
     function correct() {
         setCount(count + 1);
         const newCharacters = [...characters];
-        if (newCharacters[cIndex].char != ' ') newCharacters[cIndex].state = 'correct';
+        if (characters[cIndex].char != ' ') newCharacters[cIndex].state = 'correct';
         setCharacters(newCharacters);
         next();
     }
     // Character was typed incorrectly
     function incorrect() {
         const newWords = [...characters];
-        newWords[cIndex].state = 'incorrect';
+        if (characters[cIndex].char != ' ') newWords[cIndex].state = 'incorrect';
         setCharacters(newWords);
         next();
     }
