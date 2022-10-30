@@ -125,10 +125,10 @@ export default function TypeXCore({ settings, settingsButton }) {
     function skipWord() {
         const newCharacters = [...characters];
         for (let i = cIndex; i < newCharacters.length; i++) {
-            if (newCharacters[i - 1].char == ' ') {
-                newCharacters[i].state = 'current';
+            if (newCharacters[i].char == ' ') {
+                newCharacters[i + 1].state = 'current';
 
-                setCIndex(i);
+                setCIndex(i + 1);
                 break;
             }
             newCharacters[i].state = 'incorrect';
